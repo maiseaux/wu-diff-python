@@ -1,0 +1,48 @@
+[tool.poetry]
+name = "wu-diff"
+version = "0.1.0"
+description = "Wu(O(NP)) algorithm"
+authors = ["maiseaux"]
+license = "MIT"
+
+[tool.poetry.dependencies]
+python = "^3.8"
+
+[tool.poetry.dev-dependencies]
+autoflake = "^1.4"
+black = "^20.8b1"
+isort = "^5.7.0"
+pytest = "^6.2.2"
+
+
+[tool.black]
+line-length = 120
+target-version = ["py38"]
+include = ".pyi?$"
+exclude = """
+(
+    .eggs
+  | .git
+  | .hg
+  | .mypy_cache
+  | .tox
+  | .venv
+  | venv
+  | _build
+  | buck-out
+  | build
+  | dist
+  | node_modules
+)
+"""
+
+[tool.isort]
+multi_line_output = 3
+include_trailing_comma = true
+line_length = 120
+force_grid_wrap = 0
+skip = ["venv", "node_modules"]
+
+[build-system]
+requires = ["poetry-core>=1.0.0"]
+build-backend = "poetry.core.masonry.api"
