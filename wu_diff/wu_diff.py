@@ -88,15 +88,16 @@ class WuDiff(Generic[T]):
         self.delta = self.N - self.M
 
     @staticmethod
-    def _display_block(old: str, new: str):
+    def _display_block(old: str, new: str) -> str:
         if old and new:
-            print(" " + old)
+            return " " + old
         elif old:
-            print("-" + old)
+            return "-" + old
         else:
-            print("+" + new)
+            return "+" + new
 
-    def display_diff(self, old: Optional[List[str]] = None, new: Optional[List[str]] = None, sep: str = ""):
+    def str_diff(self, old: Optional[List[str]] = None, new: Optional[List[str]] = None, sep: str = "", diff_sep="\n") -> str:
+        out = ""
         if not old:
             old = self.old
         if not new:
@@ -108,16 +109,17 @@ class WuDiff(Generic[T]):
                 old_cur += old[diff.old_index] + sep
                 new_cur += new[diff.new_index] + sep
             elif len(old_cur) > 0 or len(new_cur) > 0:
-                self._display_block(old_cur, new_cur)
+                out += self._display_block(old_cur, new_cur) + diff_sep
                 old_cur, new_cur = "", ""
 
             if diff.diff_type == DiffType.ADDED:
-                self._display_block("", new[diff.new_index])
+                out += self._display_block("", new[diff.new_index]) + diff_sep
 
             if diff.diff_type == DiffType.REMOVED:
-                self._display_block(old[diff.old_index], "")
+                out += self._display_block(old[diff.old_index], "") + diff_sep
         if len(old_cur) > 0 or len(new_cur) > 0:
-            self._display_block(old_cur, new_cur)
+            out += self._display_block(old_cur, new_cur) + diff_sep
+        return out
 
     def _snake(self, k: int, y: int) -> int:
         while y - k < self.M and y < self.N and self.is_equal(self.A[y - k], self.B[y]):
